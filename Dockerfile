@@ -15,7 +15,7 @@ RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key &&\
     ssh-keygen -t rsa -f /etc/ssh/ssh_host_ed25519_key && \
     echo "password" | passwd --stdin root
     
-# Install devtoolset-8, python
+# Install devtoolset-7, python
 RUN yum install -y centos-release-scl && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum install -y devtoolset-7 && \
