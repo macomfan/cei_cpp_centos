@@ -35,7 +35,9 @@ RUN cd /root && \
     wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz && \
     tar -xzvf boost_1_72_0.tar.gz && rm -f boost_1_72_0.tar.gz && \
     scl enable devtoolset-7 bash && \
+	gcc --version && \
     cd boost_1_72_0 && \
+	pwd && \
     sh bootstrap.sh && \
     ./b2 install --build-dir=/tmp/build-boost && \
     rm -rf /tmp/build-boost
