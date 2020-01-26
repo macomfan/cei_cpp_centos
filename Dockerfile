@@ -29,5 +29,5 @@ RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key &&\
     echo "password" | passwd --stdin root
 
 COPY run.sh /usr/local/bin/run.sh
-RUN echo "scl enable devtoolset-7 bash" >> /root/.bashrc
+RUN scl enable devtoolset-7 bash && echo "source /opt/rh/devtoolset-7/enable" >> /root/.bashrc && source /root/.bashrc && gcc --version
     
