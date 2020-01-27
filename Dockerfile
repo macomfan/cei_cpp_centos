@@ -2,12 +2,10 @@ FROM centos:7.6.1810
 
 MAINTAINER Wenrui Ma <macomfan@163.com>
 
-# Install devtoolset-7, python
+# Install devtoolset-7
 RUN yum install -y centos-release-scl && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum install -y devtoolset-7 && \
-	scl enable devtoolset-7 bash && \
-    yum install -y python-devel && \
     yum clean all -y
 
 # Install openssl ssh
@@ -26,7 +24,7 @@ RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key &&\
     echo "password" | passwd --stdin root
 
 COPY run.sh /usr/local/bin/run.sh
-RUN scl enable devtoolset-7 bash && echo "source /opt/rh/devtoolset-7/enable" >> /root/.bashrc && source /root/.bashrc && gcc --version
+RUN scl enable devtoolset-7 bash && echo "source /opt/rh/devtoolset-7/enable" >> /root/.bashrc && source /root/.bashrc
 
 # Install CMake v3.14.7
 RUN source /root/.bashrc &&\
@@ -39,13 +37,11 @@ ENV PATH=$PATH:/bin/:/usr/bin/
 # Install Boost v1.72.0
 RUN cd /root && \
     wget https://dl.bintray.com/boostorg/release/1.72.0/source/boost_1_72_0.tar.gz && \
-    tar -xzvf boost_1_72_0.tar.gz && rm -f boost_1_72_0.tar.gz && \
+    tar -xzf boost_1_72_0.tar.gz && rm -f boost_1_72_0.tar.gz && \
     source /root/.bashrc && \
-	gcc --version && \
     cd boost_1_72_0 && \
-	pwd && \
     sh bootstrap.sh && \
-    ./b2 install --build-dir=/tmp/build-boost && \
+    ./b2 --without-python --build-dir=/tmp/build-boost install && \
     rm -rf /tmp/build-boost
 
 # Install gtest
@@ -56,7 +52,8 @@ RUN source /root/.bashrc && \
     cd build && \
     cmake .. && \
     make && make install && \
-    cd .. && rm -rf build
+    cd .. && rm -rf build && \
+	ldconfig
 
 WORKDIR /root
 EXPOSE 22
